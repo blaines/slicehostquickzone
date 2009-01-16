@@ -1,0 +1,11 @@
+TechnologyAZ
+Blaine Schanfeldt
+January 16, 2009
+-
+First time using GitHub, cut me some slack.
+
+REQUIRES: Python, pyactiveresource
+
+1) Put the PHP file in a place where it can be accessed via web.
+2) Put the PY file somewhere it can't
+3) Change Line 9 of the PHP file ($apiaccess) to reflect where you put the PY file
