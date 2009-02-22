@@ -1,11 +1,30 @@
-TechnologyAZ
-Blaine Schanfeldt
-January 16, 2009
--
-First time using GitHub, cut me some slack.
+################################################################################################
+#	Slicehost Quick Zone Creator - Copyright 2009 TechnologyAZ, LLC and Blaine Schanfeldt
+#	Version 1.00 - 2/22/09
+#	Code License:  	 MIT License - http://www.opensource.org/licenses/mit-license.php
+#
+#	REQUIRES pyactiveresource by Jared Kuolt - http://code.google.com/p/pyactiveresource/
+################################################################################################
 
-REQUIRES: Python, pyactiveresource
+QUICK SETUP
+1) Put the PHP file in a place where it can be accessed via the web.
+2) Put the PY file somewhere it can't be accessed via the web.
+3) Change line 9 of the PHP file ($apiaccess) to reflect where you put the PY file
 
-1) Put the PHP file in a place where it can be accessed via web.
-2) Put the PY file somewhere it can't
-3) Change Line 9 of the PHP file ($apiaccess) to reflect where you put the PY file
+4) Create template files where you put your PY file. See below for template file standards.
+5) Change line 13, the $templates array, to point to your template files.
+
+################################################################################################
+
+TEMPLATE FILE STANDARDS
+The template file is a multiline tab-delimited file used to create your cookie-cutter zone. Each value in the template file relates to its SliceManager equivalent. STATUS may by Y or N, and a blank/empty AUX value is valid. For your reference and testing, a demo template has been included.
+
+PLACEHOLDER STRINGS
+The following strings will be replaced when using the Slicehost Quick Zone Creator.
+example.com - Will be replaced with the input of domain
+0.0.0.0 - Will be replaced with the input from Server/Slice IP.
+
+SAMPLE
+STATUS	TYPE	NAME	DATA	AUX	TTL
+Y	MX	example.com.	ALT2.ASPMX.L.GOOGLE.COM.	5	86400
+Y	A	example.com.	0.0.0.0		86400

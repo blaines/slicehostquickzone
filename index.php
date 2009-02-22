@@ -1,12 +1,18 @@
 <?
 ################################################################################################
-#	API ACCESS PHP/PY Copyright 2009 TechnologyAZ, LLC and Blaine Schanfeldt
-#	Version 0 - 1/16/09
+#	Slicehost Quick Zone Creator - Copyright 2009 TechnologyAZ, LLC and Blaine Schanfeldt
+#	Version 1.00 - 2/22/09
 #	Code License:  	 MIT License - http://www.opensource.org/licenses/mit-license.php
 #
 #	REQUIRES pyactiveresource by Jared Kuolt - http://code.google.com/p/pyactiveresource/
 ################################################################################################
-$apiaccess = "../apiaccess.py";	# This points to your apiaccess.py
+$apiaccess = "../../shqz100.py";	# This points to the api script - store the api script in a safe directory (non-public)
+
+#					Name of template file = MUST BE IN SAME LOCATION AS $apiaccess
+#					\/\/\/\/	Template Name
+$templates = array('template'=>'Demo Template',
+				   'template'=>'Demo Template',
+				   'template'=>'Demo Template',);
 
 if(!isset($_POST['apikey']) || !isset($_POST['domain'])) {
 ?>
@@ -14,7 +20,7 @@ if(!isset($_POST['apikey']) || !isset($_POST['domain'])) {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Slicehost Quick Zone Maker</title>
+<title>Slicehost Quick Zone Creator</title>
 <style type="text/css">
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -28,6 +34,18 @@ body {
 }
 .head h1 {
 	margin: 0;
+}
+.head h1 sub {
+	font-weight: normal;
+	font-size: .5em;
+}
+.head h2 {
+	margin: 0;
+	font-size: 1em;
+}
+.head h2 sub {
+	font-weight: normal;
+	font-size: .5em;
 }
 .head p {
 	font-size: .75em;
@@ -54,7 +72,7 @@ label {
 	clear:left;
 	border-bottom: #CCC 1px solid;
 }
-input {
+input, select {
 	display:block;
 	float:right;
 	width: 30em;
@@ -68,22 +86,10 @@ input[type="radio"] {
 </head>
 <body>
 <div class="head">
-  <h1>slicehost quick zone creator</h1>
-  <p>The quick zone creator will:<br />
-    Create a new zone<br />
-    <acronym title="ns1.slicehost.net
-ns2.slicehost.net
-ns3.slicehost.net">Create three NS records</acronym><br />
-    Add an A record pointing to your slice<br />
-    <acronym title="alt1.aspmx.l.google.com.
-aspmx.l.google.com.
-alt2.aspmx.l.google.com.
-aspmx2.googlemail.com.
-aspmx3.googlemail.com.
-aspmx4.googlemail.com.
-aspmx5.googlemail.com.">Creates Google Apps MX records (optional)</acronym><br />
-    <acronym title="ghs.google.com.">Create 1 CNAME (webmail.yourdomain.tld &gt; ghs.google.com)</acronym><br />
-    <acronym title="v=spf1 include:aspmx.googlemail.com ~all">Create 1 SPF TXT record</acronym> </p>
+  <h1>slicehost quick zone creator <sub><a href="http://github.com/technologyaz/slicehostquickzone/">@ GitHub!</a></sub></h1>
+  <p> This is a working version, but if you want to modify this for your own use check out <a href="http://github.com/technologyaz/slicehostquickzone/">github</a> for both commandline and GUI versions. ( <a href="http://github.com/technologyaz/slicehostquickzone/zipball/master">ZIP</a> - <a href="http://github.com/technologyaz/slicehostquickzone/tarball/master">TAR</a> )</p>
+  <h2>NEW 2/22/09 - Templates!</h2>
+  <p>Templates are a robust and simple way to standardize your zone configurations. Submit your zone template by posting it in the forums and I'll add it to the demo.</p>
 </div>
 <div class="formdiv">
   <div class="formwrapper">
@@ -98,19 +104,19 @@ aspmx5.googlemail.com.">Creates Google Apps MX records (optional)</acronym><br /
       <label>Server/Slice IP:
         <input type="text" name="ip" />
       </label>
-      <label for="else">Confirm</label>
-      <p>MX Records for
-        <label>
-          <input type="radio" name="mxtype" value="2" id="mx0" checked="checked" />
-          Google Apps</label>
-        <label>
-          <input type="radio" name="mxtype" value="1" id="mx1" />
-          Internal (On this slice)</label>
-        <label>
-          <input type="radio" name="mxtype" value="0" id="mx0" />
-          No email</label>
-      </p>
-      <label for="else"> </label>
+      <label for="else">Zone Template</label>
+   	  <label>
+      	  <select name="template" id="template">
+<?
+foreach($templates as $k => $v) {
+?>
+      	    <option value="<?=$k?>"><?=$v?></option>
+<?
+}
+?>
+        </select>
+   	  </label>
+   	  <label for="else"> </label>
       <label for="else">Confirm
         <input type="submit" value="Confirm" />
       </label>
@@ -119,15 +125,14 @@ aspmx5.googlemail.com.">Creates Google Apps MX records (optional)</acronym><br /
   </div>
 </div>
 <div style="position: absolute; bottom:0; width: 100%; font-size: 9px; color: #CCC;">
+  <p align="center">Version 1.00</p>
   <p align="center">&copy; Copyright 2009 TechnologyAZ, LLC and Blaine Schanfeldt</p>
 </div>
+<script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script><script type="text/javascript">re_("565f0-p68368mz2b");</script>
 </body>
 </html>
 <?
 } else {
-?>
-<pre>
-<?
 foreach($_POST as $var => $val) {
 	$CLEAN[$var] = addslashes(trim(trim($val,"~!@#$%^&*()_+=-`[]\;',<>?\\:\"{}|/")));
 }
@@ -135,15 +140,52 @@ foreach($CLEAN as $key => $val) {
 	if(empty($val) && $key != 'mxtype') die("<pre>$key seems to be invalid</pre>");
 }
 
-if(`/usr/bin/python $apiaccess {$CLEAN['apikey']} {$CLEAN['domain']} {$CLEAN['ip']} {$CLEAN['mxtype']}`==1) {
-	echo "<pre>Success!</pre>";
-} else {
-	echo "<pre>Failure!</pre>";
-}
-?>
+$exec = "/usr/bin/python $apiaccess {$CLEAN['apikey']} {$CLEAN['domain']} {$CLEAN['ip']} {$CLEAN['template']}";
+
+if(exec($exec,$reply)) {
+	$log = "";
+	foreach($reply as $val) {
+		$log .= $val."\n";
+	}
+	$html = <<<HTML
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Slicehost Quick Zone Creator - Success!</title>
+</head>
+<body>
+<pre>
+<h1>Success!</h1>
+$log
 </pre>
-<?
-}
-?>
+<a href="./">Add Another</a>
+<script type='text/javascript' src='http://include.reinvigorate.net/re_.js'></script><script type='text/javascript'>var re_purchase_tag = true;var re_name_tag = '{$CLEAN['domain']}';var re_context_tag = 'http://{$CLEAN['domain']} - Success';re_('565f0-p68368mz2b');</script>
 </body>
 </html>
+HTML;
+echo $html;
+} else {
+	$html = <<<HTML
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Slicehost Quick Zone Creator - Failure!</title>
+</head>
+<body>
+<pre>
+<h1>Failure!</h1>
+-Make sure the zone does not already exist.
+-Make sure the API key is valid.
+-Make sure the template file is valid.
+</pre>
+<a href="./">Go Back</a>
+<script type='text/javascript' src='http://include.reinvigorate.net/re_.js'></script><script type='text/javascript'>var re_purchase_tag = true;var re_name_tag = '{$CLEAN['domain']}';var re_context_tag = 'http://{$CLEAN['domain']} - Failure';re_('565f0-p68368mz2b');</script>
+</body>
+</html>
+HTML;
+echo $html;
+}
+}
+?>

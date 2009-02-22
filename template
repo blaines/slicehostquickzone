@@ -1,0 +1,12 @@
+Y	A	example.com.	0.0.0.0		86400
+Y	A	www.example.com.	0.0.0.0		86400
+Y	CNAME	webmail.example.com.	ghs.google.com.		86400
+Y	NS	example.com.	ns1.slicehost.net.		86400
+Y	NS	example.com.	ns2.slicehost.net.		86400
+Y	NS	example.com.	ns3.slicehost.net.		86400
+Y	TXT	example.com.	v=spf1 include:aspmx.googlemail.com ~all		86400
+Y	MX	example.com.	ASPMX.L.GOOGLE.COM. 	1	86400
+Y	MX	example.com.	ALT1.ASPMX.L.GOOGLE.COM.	5	86400
+Y	MX	example.com.	ALT2.ASPMX.L.GOOGLE.COM.	5	86400
+Y	MX	example.com.	ASPMX2.GOOGLEMAIL.COM.	10	86400
+Y	MX	example.com.	ASPMX3.GOOGLEMAIL.COM.	10	86400
